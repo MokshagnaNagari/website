@@ -1,0 +1,218 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Form</title>
+
+<style>
+/* ===== Animated Gradient Background ===== */
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(-45deg, #74ebd5, #9face6, #a18cd1, #fbc2eb);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* ===== Glassmorphism Form ===== */
+.container {
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.15);
+    padding: 30px;
+    border-radius: 15px;
+    width: 350px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    color: #fff;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* ===== Floating Input ===== */
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background: transparent;
+    border-bottom: 2px solid #fff;
+    color: #fff;
+    font-size: 16px;
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.input-group input:focus ~ label,
+.input-group input:valid ~ label {
+    top: -10px;
+    font-size: 12px;
+    color: #ffd;
+}
+
+/* ===== Button ===== */
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 25px;
+    background: #fff;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #333;
+    color: #fff;
+}
+
+/* ===== Password Strength ===== */
+.strength {
+    height: 5px;
+    border-radius: 5px;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+
+/* ===== Error Message ===== */
+.error {
+    font-size: 12px;
+    color: #ffdddd;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Register</h2>
+    
+    <form id="form">
+        
+        <div class="input-group">
+            <input type="text" id="name" required>
+            <label>Name</label>
+            <div class="error" id="nameError"></div>
+        </div>
+
+        <div class="input-group">
+            <input type="email" id="email" required>
+            <label>Email</label>
+            <div class="error" id="emailError"></div>
+        </div>
+
+        <div class="input-group">
+            <input type="password" id="password" required>
+            <label>Password</label>
+            <div class="strength" id="strengthBar"></div>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+// ===== Validation =====
+const form = document.getElementById("form");
+const nameInput = document.getElementById("name");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+
+const nameError = document.getElementById("nameError");
+const emailError = document.getElementById("emailError");
+const strengthBar = document.getElementById("strengthBar");
+
+// Name validation
+nameInput.addEventListener("input", () => {
+    if (nameInput.value.length < 3) {
+        nameError.textContent = "Minimum 3 characters required";
+    } else {
+        nameError.textContent = "";
+    }
+});
+
+// Email validation
+emailInput.addEventListener("input", () => {
+    const pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if (!emailInput.value.match(pattern)) {
+        emailError.textContent = "Invalid email format";
+    } else {
+        emailError.textContent = "";
+    }
+});
+
+// Password strength checker
+passwordInput.addEventListener("input", () => {
+    let strength = 0;
+    const val = passwordInput.value;
+
+    if (val.length > 5) strength++;
+    if (/[A-Z]/.test(val)) strength++;
+    if (/[0-9]/.test(val)) strength++;
+    if (/[@$!%*?&]/.test(val)) strength++;
+
+    switch (strength) {
+        case 1:
+            strengthBar.style.width = "25%";
+            strengthBar.style.background = "red";
+            break;
+        case 2:
+            strengthBar.style.width = "50%";
+            strengthBar.style.background = "orange";
+            break;
+        case 3:
+            strengthBar.style.width = "75%";
+            strengthBar.style.background = "yellow";
+            break;
+        case 4:
+            strengthBar.style.width = "100%";
+            strengthBar.style.background = "lime";
+            break;
+        default:
+            strengthBar.style.width = "0";
+    }
+});
+
+// Submit
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (
+        nameInput.value.length >= 3 &&
+        emailInput.value &&
+        passwordInput.value.length >= 6
+    ) {
+        alert("Form Submitted Successfully!");
+    } else {
+        alert("Please fix errors before submitting");
+    }
+});
+</script>
+
+</body>
+</html>
